@@ -38,11 +38,13 @@ class QuestionController extends Controller
         ]);
 
         // Panggil view 'respon'
-        return view('respon', [
+        return view('home-question-respon', [
             'nama'       => $request->nama,
             'email'      => $request->email,
             'pertanyaan' => $request->pertanyaan,
         ]);
+
+
     }
     /**
      * Display the specified resource.
