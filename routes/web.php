@@ -25,5 +25,7 @@ Route::get('/nim/{param1?}', function ($param1 = '2557301060') {
 
 Route::get('/home',[HomeController::class,'index']);
 
-Route::post('question/store', [QuestionController::class, 'store'])
-		->name('question.store');
+
+
+Route::get('/', [QuestionController::class, 'index'])->name('home');
+Route::post('/question/store', [QuestionController::class, 'store'])->name('question.store');

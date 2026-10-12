@@ -11,7 +11,10 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        return view('home', [
+            'username'   => 'naufal',
+            'last_login' => now()->format('Y-m-d H:i:s'),
+        ]);
     }
 
     /**
@@ -25,17 +28,22 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+  public function store(Request $request)
     {
-     //   dd($request->all());
-     $data ['nama'] = $request->nama;
-     $data ['email'] = $request->email;
-     $data ['pertanyaan'] = $request->pertanyaan;
+        // Validasi input
+        $request->validate([
+            'nama'       => 'required',
+            'email'      => 'required|email',
+            'pertanyaan' => 'required|min:8',
+        ]);
 
-     return view('home-question-respon',$data);
-
+        // Panggil view 'respon'
+        return view('respon', [
+            'nama'       => $request->nama,
+            'email'      => $request->email,
+            'pertanyaan' => $request->pertanyaan,
+        ]);
     }
-
     /**
      * Display the specified resource.
      */
