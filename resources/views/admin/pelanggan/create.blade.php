@@ -114,7 +114,7 @@
 		    </a>
 		</li>
 
-		
+
 </ul>
 
                 <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
@@ -304,14 +304,14 @@
             <div class="col-12 mb-4">
                 <div class="card border-0 shadow components-section">
                     <div class="card-body">
-                        <form action="{route{('pelanggan.store')}}" method="POST">
+                        <form action="{{ route('pelanggan.store') }}" method="POST">
                             @csrf
                             <div class="row mb-4">
                                 <div class="col-lg-4 col-sm-6">
                                     <!-- First Name -->
                                     <div class="mb-3">
                                         <label for="first_name" class="form-label">First name</label>
-                                        <input type="text" id="first_name" class="form-control"name="first_name" required>
+                                     <input type="text" id="first_name" class="form-control" name="first_name" required>
                                     </div>
 
                                     <!-- Last Name -->
@@ -331,7 +331,7 @@
                                     <!-- Gender -->
                                     <div class="mb-3">
                                         <label for="gender" class="form-label">Gender</label>
-                                        <select id="gender" name="gender" class="form-select" name="gender">
+                                        <select id="gender" name="gender" class="form-select">
                                             <option value="">-- Pilih --</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
