@@ -1,7 +1,6 @@
 @extends('layouts.admin.app')
 
 @section('content')
-    {{-- start main content --}}
     <div class="py-4">
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
             <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
@@ -47,8 +46,12 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th class="border-0">#</th>
-                                    <th class="border-0">Nama</th>
+                                    <th class="border-0">First Name</th>
+                                    <th class="border-0">Last Name</th>
+                                    <th class="border-0">Birthday</th>
+                                    <th class="border-0">Gender</th>
                                     <th class="border-0">Email</th>
+                                    <th class="border-0">Phone</th>
                                     <th class="border-0 text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -56,8 +59,12 @@
                                 @forelse ($dataUser as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->first_name }}</td>
+                                        <td>{{ $item->last_name }}</td>
+                                        <td>{{ $item->birthday }}</td>
+                                        <td>{{ $item->gender }}</td>
                                         <td>{{ $item->email }}</td>
+                                        <td>{{ $item->phone }}</td>
                                         <td class="text-center">
                                             {{-- Tombol Edit User --}}
                                             <a href="{{ route('user.edit', $item->id) }}" class="btn btn-info btn-sm text-white">
@@ -76,7 +83,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-4">Belum ada data user.</td>
+                                        <td colspan="8" class="text-center py-4">Belum ada data user.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -86,5 +93,4 @@
             </div>
         </div>
     </div>
-    {{-- end main content --}}
 @endsection
