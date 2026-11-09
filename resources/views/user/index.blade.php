@@ -45,34 +45,29 @@
                         <table id="table-user" class="table table-centered table-nowrap mb-0 rounded">
                             <thead class="thead-light">
                                 <tr>
-                                    <th class="border-0">#</th>
-                                    <th class="border-0">First Name</th>
-                                    <th class="border-0">Last Name</th>
-                                    <th class="border-0">Birthday</th>
-                                    <th class="border-0">Gender</th>
+                                    <th class="border-0">Nama</th>
                                     <th class="border-0">Email</th>
-                                    <th class="border-0">Phone</th>
-                                    <th class="border-0 text-center">Aksi</th>
+                                    <th class="border-0">Password</th>
+                                    <th class="border-0 rounded-end">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($dataUser as $item)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->first_name }}</td>
-                                        <td>{{ $item->last_name }}</td>
-                                        <td>{{ $item->birthday }}</td>
-                                        <td>{{ $item->gender }}</td>
+                                        <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
-                                        <td>{{ $item->phone }}</td>
+                                        <td>{{ $item->password }}</td>
                                         <td class="text-center">
                                             {{-- Tombol Edit User --}}
-                                            <a href="{{ route('user.edit', $item->id) }}" class="btn btn-info btn-sm text-white">
+                                            <a href="{{ route('user.edit', $item->id) }}"
+                                                class="btn btn-info btn-sm text-white">
                                                 Edit
                                             </a>
 
                                             {{-- Tombol Hapus User --}}
-                                            <form action="{{ route('user.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                            <form action="{{ route('user.destroy', $item->id) }}" method="POST"
+                                                class="d-inline"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm text-white">

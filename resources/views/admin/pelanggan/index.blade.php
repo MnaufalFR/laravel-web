@@ -44,32 +44,33 @@
         <table class="table table-hover align-items-center">
             <thead>
                 <tr>
-                    <th class="border-gray-200">#</th>
-                    <th class="border-gray-200">FIRST NAME</th>
-                    <th class="border-gray-200">LAST NAME</th>
-                    <th class="border-gray-200">BIRTHDAY</th>
-                    <th class="border-gray-200">GENDER</th>
-                    <th class="border-gray-200">EMAIL</th>
-                    <th class="border-gray-200">PHONE</th>
-                    <th class="border-gray-200">AKSI</th>
+                    <th class="border-0">Nama</th>
+                    <th class="border-0">Email</th>
+                    <th class="border-0">Password</th>
+                    <th class="border-0 rounded-end">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($dataPelanggan as $item)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->first_name }}</td>
-                        <td>{{ $item->last_name }}</td>
-                        <td>{{ $item->birthday }}</td>
-                        <td>{{ $item->gender }}</td>
-                        <td>{{ $item->email }}</td>
-                        <td>{{ $item->phone }}</td>
+                        {{-- Cek fallback nama dari $item->nama, $item->nama_pelanggan, $item->name, atau relasi $item->user --}}
+                        <td>{{ $item->nama ?? $item->nama_pelanggan ?? $item->name ?? $item->user->name ?? '-' }}</td>
+                        <td>{{ $item->email ?? $item->user->email ?? '-' }}</td>
+                        <td>
+                            @if (!empty($item->password))
+                                <span class="text-muted" title="{{ $item->password }}">{{ Str::limit($item->password, 20) }}</span>
+                            @else
+                                <span class="text-muted">••••••••</span>
+                            @endif
+                        </td>
                         <td>
                             {{-- Tombol Edit --}}
-                            <a href="{{ route('pelanggan.edit', $item->pelanggan_id) }}" class="btn btn-info btn-sm text-white">Edit</a>
+                            <a href="{{ route('pelanggan.edit', $item->pelanggan_id ?? $item->id) }}"
+                                class="btn btn-info btn-sm text-white">Edit</a>
 
                             {{-- Tombol Hapus --}}
-                            <form action="{{ route('pelanggan.destroy', $item->pelanggan_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                            <form action="{{ route('pelanggan.destroy', $item->pelanggan_id ?? $item->id) }}" method="POST"
+                                class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm text-white">Hapus</button>
@@ -78,7 +79,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center py-4">Belum ada data pelanggan.</td>
+                        <td colspan="4" class="text-center py-4">Belum ada data pelanggan.</td>
                     </tr>
                 @endforelse
             </tbody>
