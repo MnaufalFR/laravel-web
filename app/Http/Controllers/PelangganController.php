@@ -7,9 +7,18 @@ use Illuminate\Http\Request;
 
 class PelangganController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dataPelanggan = Pelanggan::all();
+        $filterableColumns = ['gender'];
+        $searchableColumns = ['first_name', 'last_name', 'email'];
+
+        // Menggunakan scope filter & search dari Model
+        $dataPelanggan = Pelanggan::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.pelanggan.index', compact('dataPelanggan'));
     }
 
@@ -20,7 +29,7 @@ class PelangganController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name'  => 'required|string|max:100',
             'birthday'   => 'nullable|date',
@@ -29,22 +38,16 @@ class PelangganController extends Controller
             'phone'      => 'nullable|string|max:20',
         ]);
 
-        Pelanggan::create([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'birthday'   => $request->birthday,
-            'gender'     => $request->gender,
-            'email'      => $request->email,
-            'phone'      => $request->phone,
-        ]);
+        Pelanggan::create($validated);
 
-        return redirect()->route('pelanggan.index')->with('success', 'Penambahan Data Berhasil!');
+        return redirect()->route('pelanggan.index')
+            ->with('success', 'Penambahan Data Berhasil!');
     }
 
-    // Mengirim variabel $pelanggan ke view edit
     public function edit($id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
+
         return view('admin.pelanggan.edit', compact('pelanggan'));
     }
 
@@ -52,7 +55,7 @@ class PelangganController extends Controller
     {
         $pelanggan = Pelanggan::findOrFail($id);
 
-        $request->validate([
+        $validated = $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name'  => 'required|string|max:100',
             'birthday'   => 'nullable|date',
@@ -61,24 +64,18 @@ class PelangganController extends Controller
             'phone'      => 'nullable|string|max:20',
         ]);
 
-        $pelanggan->update([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'birthday'   => $request->birthday,
-            'gender'     => $request->gender,
-            'email'      => $request->email,
-            'phone'      => $request->phone,
-        ]);
+        $pelanggan->update($validated);
 
-        return redirect()->route('pelanggan.index')->with('success', 'Perubahan Data Berhasil!');
+        return redirect()->route('pelanggan.index')
+            ->with('success', 'Perubahan Data Berhasil!');
     }
 
-    // Fungsi Hapus Data
     public function destroy($id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
         $pelanggan->delete();
 
-        return redirect()->route('pelanggan.index')->with('success', 'Data Pelanggan Berhasil Dihapus!');
+        return redirect()->route('pelanggan.index')
+            ->with('success', 'Data Pelanggan Berhasil Dihapus!');
     }
 }

@@ -41,35 +41,64 @@
 
     {{-- Tabel Data --}}
     <div class="card card-body border-0 shadow table-wrapper table-responsive mb-4">
+        <form method="GET" action="{{ route('pelanggan.index') }}" class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    <select name="gender" class="form-select" onchange="this.form.submit()">
+                        <option value="">All</option>
+                        <option value="Male" {{ request('gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ request('gender') == 'Female' ? 'selected' : '' }}>Female</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" id="exampleInputIconRight"
+                            value="{{ request('search') }}" placeholder="Search" aria-label="Search">
+                        <button type="submit" class="input-group-text" id="basic-addon2">
+                            <svg class="icon icon-xxs" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        @if(request('search'))
+							<a href="{{ request()->fullUrlWithQuery(['search'=> null]) }}" class="btn btn-outline-secondary ml-3" id="clear-search"> Clear</a>
+					@endif
+                    </div>
+                </div>
+            </div>
+        </form>
         <table class="table table-hover align-items-center">
             <thead>
                 <tr>
-                    <th class="border-0">Nama</th>
-                    <th class="border-0">Email</th>
-                    <th class="border-0">Password</th>
-                    <th class="border-0 rounded-end">Action</th>
+                    <th class="border-gray-200">#</th>
+                    <th class="border-gray-200">FIRST NAME</th>
+                    <th class="border-gray-200">LAST NAME</th>
+                    <th class="border-gray-200">BIRTHDAY</th>
+                    <th class="border-gray-200">GENDER</th>
+                    <th class="border-gray-200">EMAIL</th>
+                    <th class="border-gray-200">PHONE</th>
+                    <th class="border-gray-200">AKSI</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($dataPelanggan as $item)
                     <tr>
-                        {{-- Cek fallback nama dari $item->nama, $item->nama_pelanggan, $item->name, atau relasi $item->user --}}
-                        <td>{{ $item->nama ?? $item->nama_pelanggan ?? $item->name ?? $item->user->name ?? '-' }}</td>
-                        <td>{{ $item->email ?? $item->user->email ?? '-' }}</td>
-                        <td>
-                            @if (!empty($item->password))
-                                <span class="text-muted" title="{{ $item->password }}">{{ Str::limit($item->password, 20) }}</span>
-                            @else
-                                <span class="text-muted">••••••••</span>
-                            @endif
-                        </td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->first_name }}</td>
+                        <td>{{ $item->last_name }}</td>
+                        <td>{{ $item->birthday }}</td>
+                        <td>{{ $item->gender }}</td>
+                        <td>{{ $item->email }}</td>
+                        <td>{{ $item->phone }}</td>
                         <td>
                             {{-- Tombol Edit --}}
-                            <a href="{{ route('pelanggan.edit', $item->pelanggan_id ?? $item->id) }}"
+                            <a href="{{ route('pelanggan.edit', $item->pelanggan_id) }}"
                                 class="btn btn-info btn-sm text-white">Edit</a>
 
                             {{-- Tombol Hapus --}}
-                            <form action="{{ route('pelanggan.destroy', $item->pelanggan_id ?? $item->id) }}" method="POST"
+                            <form action="{{ route('pelanggan.destroy', $item->pelanggan_id) }}" method="POST"
                                 class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                 @csrf
                                 @method('DELETE')
@@ -79,10 +108,13 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center py-4">Belum ada data pelanggan.</td>
+                        <td colspan="8" class="text-center py-4">Belum ada data pelanggan.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-3">
+            {{ $dataPelanggan->links('pagination::bootstrap-5') }}
+        </div>
     </div>
 @endsection
